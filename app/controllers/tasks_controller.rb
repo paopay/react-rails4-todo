@@ -1,12 +1,9 @@
 class TasksController < ApplicationController
-	before_filter :find_task
+	respond_to :json
 
-	
-
-	private
-
-	def find_task
-		@model = Task.find(params[:id]) if params[:id]
+	def index
+		respond_with Task.find_each
 	end
 	
+
 end

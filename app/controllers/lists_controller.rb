@@ -1,11 +1,15 @@
 class ListsController < ApplicationController
-	before_filter :find_list
+	respond_to :json
+
+	def index
+		respond_with List.find_each
+	end
 
 	
 
 	private
-	
-	def find_list
-		@model = List.find(params[:id]) if params[:id]
+
+	def list_params
+		params.require(:list).permit(:name)
 	end
 end
