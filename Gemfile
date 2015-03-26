@@ -26,7 +26,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'react-rails', github: 'reactjs/react-rails'
 # JSON serialize
 gem 'active_model_serializers'
-
+# enable respond_to
+gem 'responders'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

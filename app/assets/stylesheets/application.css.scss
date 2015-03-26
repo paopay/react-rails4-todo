@@ -12,5 +12,13 @@
  *
  *= require_self
  */
+@import "normalize";
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "vars_mixins";
+@import "lists";
+
+.well {
+	margin-bottom: 0px;
+	border-radius: 4px 4px 0 0;
+}

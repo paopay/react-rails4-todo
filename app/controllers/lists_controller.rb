@@ -5,8 +5,6 @@ class ListsController < ApplicationController
 		respond_with List.find_each
 	end
 
-	
-
 	private
 
 	def list_params
