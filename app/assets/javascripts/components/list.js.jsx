@@ -6,7 +6,8 @@ var Lists = React.createClass({
 	render: function() {
 		return (
 			<li className="Lists">
-				{this.props.list}
+				<a href={"/lists/" + this.props.id} >{this.props.name}</a>
+				<span className="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span>
 			</li>
 		);
 	}
@@ -18,14 +19,14 @@ var ListOfLists = React.createClass({
 	render: function() {
 		var listNodes = this.props.lists.map(function (list) {
 			return (
-				<Lists list={list.name} />
+				<Lists name={list.name} id={list.id} key={list.id} />
 			);
 		});
 
 		return (
-			<div className="ListOfLists">
+			<ul className="ListOfLists">
 				{listNodes}
-			</div>
+			</ul>
 		);
 	}
 });
