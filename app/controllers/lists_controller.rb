@@ -6,11 +6,12 @@ class ListsController < ApplicationController
 	end
 
 	def show
+		# include tasks in the json object
 		respond_with find_task.as_json(include: :tasks)
 	end
 
 	def create
-		
+		respond_with List.create(list_params)
 	end
 
 	private

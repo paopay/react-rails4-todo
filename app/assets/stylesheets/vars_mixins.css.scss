@@ -14,11 +14,13 @@ $blue: #2980b9;
 	height: 60px;
 }
 
+// box for icons
 .icon-box {
 	border-radius: 4px;
 	padding: 2px;
 	color: #fff;
 }
+
 // delete icon
 .glyphicon-remove {
 	@extend .icon-box;

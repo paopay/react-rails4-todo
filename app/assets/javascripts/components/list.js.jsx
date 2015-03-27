@@ -69,13 +69,63 @@ var ListBox = React.createClass({
 			}.bind(this)
 		});
 	},
+	handleListSubmit: function(list) {
+		// add created list to array of lists
+		// set the state of ListBox to be the new list
+		console.log('in handleListSubmit');
+		var lists = this.state.lists;
+		var newLists = lists.concat([list]);
+		this.setState({lists: newLists});
+		$.ajax({
+			url: this.props.url,
+			dataType: "json",
+			type: "POST",
+			data: {"list": list},
+			// successfully posting a new list calls the
+			// loadListFromServer function to re-render the component
+			success: function (data) {
+				console.log('in handleListSubmit ajax success');
+				this.loadListsFromServer();
+			}.bind(this),
+			error: function (xhr, status, err) {
+				console.error(this.props.url, status, err.toString());
+			}.bind(this)
+		});
+	},
 	render: function() {
 		// the return is a call to the ListOfLists component
 		// with the lists props being set
+		// *
+		// also calls ListForm Component and sets onListSubmit prop to the function handleListSubmit
 		return (
 			<div className="ListBox">
 				<ListOfLists lists={this.state.lists} />
+				<ListForm onListSubmit={this.handleListSubmit} />
 			</div>
+		);
+	}
+});
+
+// component for list form
+var ListForm = React.createClass({
+	// getDOMNode grabs the dom element based on the react component
+	// calls onListSubmit prop which points to the handleListSubmit function in the ListBox component
+	// sets name input back to blank
+	handleSubmit: function(e) {
+		console.log('in handle submit');
+		var name = this.refs.name.getDOMNode().value.trim();
+		this.props.onListSubmit({name: name});
+		this.refs.name.getDOMNode().value = "";
+		e.preventDefault();
+	},
+
+	render: function() {
+		// calls function above (handleSubmit) when submitted
+		return (
+			<form className="ListForm" onSubmit={this.handleSubmit}>
+				<input type="text" placeholder="Name of list" ref="name" />
+				<input type="submit" value="Create List" />
+			</form>
 		);
 	}
 });
