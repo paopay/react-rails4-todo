@@ -7,8 +7,26 @@ var Lists = React.createClass({
 		return (
 			<li className="Lists">
 				<a href={"/lists/" + this.props.id} >{this.props.name}</a>
-				<span className="glyphicon glyphicon-remove pull-right" aria-hidden="true"></span>
+				<ListDelete id={this.props.id} fnLoad={this.props.fnLoad} />
 			</li>
+		);
+	}
+});
+
+var ListDelete = React.createClass({
+	handleDelete: function() {
+		var id = this.props.id;
+		$.ajax({
+			url: "/lists/" + id,
+			type: "DELETE",
+			success: function() {
+				this.props.fnLoad();
+			}.bind(this)
+		});
+	},
+	render: function() {
+		return (
+			<span className="glyphicon glyphicon-remove pull-right" aria-hidden="true" onClick={this.handleDelete}></span>
 		);
 	}
 });
@@ -17,9 +35,10 @@ var Lists = React.createClass({
 // the List component is called in here
 var ListOfLists = React.createClass({
 	render: function() {
+		var fnLoad = this.props.fnLoad;
 		var listNodes = this.props.lists.map(function (list) {
 			return (
-				<Lists name={list.name} id={list.id} key={list.id} />
+				<Lists name={list.name} id={list.id} key={list.id} fnLoad={fnLoad} />
 			);
 		});
 
@@ -61,6 +80,7 @@ var ListBox = React.createClass({
 				this.setState({
 					lists: lists 
 				});
+				$('li').last().css('border-radius', '0 0 4px 4px');
 				// 'this' inside the ajax call is the ajax object
 				// therefore, it needs to be bound to the react component
 			}.bind(this),
@@ -72,7 +92,6 @@ var ListBox = React.createClass({
 	handleListSubmit: function(list) {
 		// add created list to array of lists
 		// set the state of ListBox to be the new list
-		console.log('in handleListSubmit');
 		var lists = this.state.lists;
 		var newLists = lists.concat([list]);
 		this.setState({lists: newLists});
@@ -84,7 +103,6 @@ var ListBox = React.createClass({
 			// successfully posting a new list calls the
 			// loadListFromServer function to re-render the component
 			success: function (data) {
-				console.log('in handleListSubmit ajax success');
 				this.loadListsFromServer();
 			}.bind(this),
 			error: function (xhr, status, err) {
@@ -99,7 +117,7 @@ var ListBox = React.createClass({
 		// also calls ListForm Component and sets onListSubmit prop to the function handleListSubmit
 		return (
 			<div className="ListBox">
-				<ListOfLists lists={this.state.lists} />
+				<ListOfLists lists={this.state.lists} fnLoad={this.loadListsFromServer} />
 				<ListForm onListSubmit={this.handleListSubmit} />
 			</div>
 		);
@@ -112,7 +130,6 @@ var ListForm = React.createClass({
 	// calls onListSubmit prop which points to the handleListSubmit function in the ListBox component
 	// sets name input back to blank
 	handleSubmit: function(e) {
-		console.log('in handle submit');
 		var name = this.refs.name.getDOMNode().value.trim();
 		this.props.onListSubmit({name: name});
 		this.refs.name.getDOMNode().value = "";
@@ -123,8 +140,12 @@ var ListForm = React.createClass({
 		// calls function above (handleSubmit) when submitted
 		return (
 			<form className="ListForm" onSubmit={this.handleSubmit}>
-				<input type="text" placeholder="Name of list" ref="name" />
-				<input type="submit" value="Create List" />
+				<div className="input-group">
+					<input type="text" placeholder="Name of list" ref="name" />
+				  <div className="input-group-btn">
+						<input type="submit" value="Create List" className="btn btn-success" />
+				  </div>
+				</div>
 			</form>
 		);
 	}

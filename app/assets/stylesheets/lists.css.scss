@@ -1,4 +1,13 @@
-.Lists {
-	list-style-type: none;
-	@extend .box;
+#lists {	
+	.Lists {
+		list-style-type: none;
+		@extend .box;
+
+	}
+
+	input[type="text"] {
+		height: 50px;
+		width: 100%;
+		padding: 10px;
+	}
 }

@@ -6,10 +6,15 @@ $white: #ecf0f1;
 $lightblue: #3498db;
 $blue: #2980b9;
 
+@mixin btn-color($color) {
+	background-color: $color;
+	border-color: $color;
+	height: 50px;
+}
+
 // task/list box
 .box {
 	border: 1px solid #e3e3e3;
-	border-radius: 0 0 4px 4px;
 	padding: 20px;
 	height: 60px;
 }
@@ -26,4 +31,12 @@ $blue: #2980b9;
 	@extend .icon-box;
 	background-color: $red;
 	border: 1px solid $red;
+}
+
+.btn-success {
+	@include btn-color($blue);
+
+	&:hover {
+		background-color: #2980df
+	}
 }

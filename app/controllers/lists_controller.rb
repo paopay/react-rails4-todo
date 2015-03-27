@@ -14,6 +14,10 @@ class ListsController < ApplicationController
 		respond_with List.create(list_params)
 	end
 
+	def destroy
+		respond_with find_task.destroy
+	end
+
 	private
 
 	def list_params
